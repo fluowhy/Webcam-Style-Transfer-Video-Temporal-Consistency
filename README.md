@@ -48,11 +48,11 @@ Clone the repository:
 ```
 git clone https://github.com/fluowhy/Webcam-Style-Transfer-Video-Temporal-Consistency.git
 ```
-Download pretrained blind video temporal consistency models as stated [here](https://github.com/phoenix104104/fast_blind_video_consistency#learning-blind-video-temporal-consistency):
+Download pretrained blind video temporal consistency model as stated [here](https://github.com/phoenix104104/fast_blind_video_consistency#learning-blind-video-temporal-consistency):
 ```
 bash pretrained_models/download_models.sh
 ```
-[Download](https://drive.google.com/file/d/1M5KBPfqrIUZqrBZf78CIxLrMUT4lD4t9/view) VGG encoder and decoder pretrained models as stated [here](https://github.com/sunshineatnoon/PytorchWCT)
+[Download](https://drive.google.com/file/d/1M5KBPfqrIUZqrBZf78CIxLrMUT4lD4t9/view) VGG encoder and decoder pretrained models as stated [here](https://github.com/sunshineatnoon/PytorchWCT) and extract it in the repository folder. There should be a /models folder with VGG encoder and decoder models inside it.
 
 
 Please note that some Python libraries would be missing in your environment, but they must be easy to install with pip. 
