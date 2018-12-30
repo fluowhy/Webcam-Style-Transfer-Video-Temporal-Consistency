@@ -4,7 +4,13 @@ The following proyect is a merge from Learning Blind Video Temporal Consistency 
 
 For the sake of clarity, I am not the owner of some programs in this repository, being the original authors listed in the previous urls. The work was to select the main functional parts of both algorithms and join them properly in order to use the webcam.
 
-## Requirements
+# Table of contents
+1. [Requirements](#requirements)
+2. [Installation](#installation)
+3. [Use](#use)
+3. [Results](#results)
+
+## Requirements <a name="requirements"></a>
 
 * Python 3.6
 * gcc 6
@@ -16,7 +22,7 @@ For the sake of clarity, I am not the owner of some programs in this repository,
 * [TensorboardX](https://github.com/lanpa/tensorboardX)
 
 
-## Installation
+## Installation <a name="installations"></a>
 
 The following instructions were tested with Ubuntu 18.04.
 
@@ -39,6 +45,6 @@ pip install opencv-python
 pip install tensorboardX
 ```
 
-## Use
+## Use <a name="use"></a>
 
-## Results 
+## Results <a name="results"></a>
