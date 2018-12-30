@@ -96,7 +96,7 @@ class StyleTransfer():
     def uploadStyleImage(self, image_path, resize=False):
         self.styleImg = cv2.imread(image_path, 1)
         if resize:
-            self.styleImg = cv2.resize(self.styleImg, None, fx=0.25, fy=0.25, interpolation=cv2.INTER_CUBIC)
+            self.styleImg = cv2.resize(self.styleImg, None, fx=0.5, fy=0.5, interpolation=cv2.INTER_CUBIC)
         self.styleImg = int2float(self.styleImg)
         self.styleImg = torch.Tensor(self.styleImg).unsqueeze(0).transpose(1, 3).cuda(self.args.gpu)
         self.sImg = Variable(self.styleImg, volatile=True)

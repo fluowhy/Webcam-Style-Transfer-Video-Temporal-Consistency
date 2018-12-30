@@ -61,4 +61,10 @@ Please note that some Python libraries would be missing in your environment, but
 
 ## Use <a name="use"></a>
 
+Now it is possible to run the algorithm without problems. To start it run:
+```
+python python run_webcam.py --cuda --alpha <value> --style <path/to/style/image> 
+```
+where --cuda enables cuda, --alpha [0, 1] is a parameter which tunes the style component in the processed image and --style is the path to te style image. Default values are --alpha 0.5 and --style style/kandinsky.jpg Yellow-Red-Blue painting by Kandinsky.
+
 ## Results <a name="results"></a>
