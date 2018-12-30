@@ -23,6 +23,7 @@ def equalization(img):
     img_yuv[:, :, 0] = cv2.equalizeHist(img_yuv[:, :, 0])
     return cv2.cvtColor(img_yuv, cv2.COLOR_YUV2BGR)
 
+
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description='Fast Blind Video Temporal Consistency - WCT Pytorch')
@@ -42,6 +43,7 @@ if __name__ == "__main__":
     parser.add_argument('--fineSize', type=int, default=512, help='resize image to fineSize x fineSize,leave it to 0 if not resize')
     parser.add_argument('--alpha', type=float,default=0.5, help='hyperparameter to blend wct feature and content feature')
     parser.add_argument('--gpu', type=int, default=0, help="which gpu to run on.  default is 0")
+    parser.add_argument('--style', type=str, default="style/kandinsky.jpeg", help="path to style image")
     
     args = parser.parse_args()
     args.ccuda = True
@@ -53,7 +55,7 @@ if __name__ == "__main__":
 
 
     ### load model opts
-    opts_filename = "/home/mauricio/Documents/Uni/primavera_2018/vision_computacional/fast_blind_video_consistency/pretrained_models/ECCV18_blind_consistency_opts.pth"
+    opts_filename = "pretrained_models/ECCV18_blind_consistency_opts.pth"
     print("Load %s" %opts_filename)
     with open(opts_filename, 'rb') as f:
         print(f)
@@ -66,7 +68,7 @@ if __name__ == "__main__":
 
 
     ### load trained model
-    model_filename = "/home/mauricio/Documents/Uni/primavera_2018/vision_computacional/fast_blind_video_consistency/pretrained_models/ECCV18_blind_consistency.pth"
+    model_filename = "pretrained_models/ECCV18_blind_consistency.pth"
     print("Load %s" %model_filename)
     state_dict = torch.load(model_filename)
     model.load_state_dict(state_dict['model'])
@@ -78,7 +80,7 @@ if __name__ == "__main__":
     model.eval()
             
     ST = StyleTransfer(args)
-    ST.uploadStyleImage("/home/mauricio/Documents/PytorchWCT/images/style/homer2.jpg", resize=True)
+    ST.uploadStyleImage(args.style, resize=True)
     cap = cv2.VideoCapture(0)
 
     # initial

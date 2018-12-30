@@ -44,11 +44,18 @@ pip install https://download.pytorch.org/whl/cu91/torch-0.4.0-cp36-cp36m-linux_x
 pip install opencv-python
 pip install tensorboardX
 ```
-Finally clone the repository:
+Clone the repository:
 ```
 git clone https://github.com/fluowhy/Webcam-Style-Transfer-Video-Temporal-Consistency.git
 ```
-Please note that some Python libraries would be missing in your environment, but they must be easy to install with pip.
+Download pretrained blind video temporal consistency models as stated [here](https://github.com/phoenix104104/fast_blind_video_consistency#learning-blind-video-temporal-consistency):
+```
+bash pretrained_models/download_models.sh
+```
+[Download](https://drive.google.com/file/d/1M5KBPfqrIUZqrBZf78CIxLrMUT4lD4t9/view) VGG encoder and decoder pretrained models as stated [here](https://github.com/sunshineatnoon/PytorchWCT)
+
+
+Please note that some Python libraries would be missing in your environment, but they must be easy to install with pip. 
 
 ## Use <a name="use"></a>
 
