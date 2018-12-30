@@ -5,6 +5,12 @@ The following proyect is a merge from Learning Blind Video Temporal Consistency 
 For the sake of clarity, I am not the owner of some programs in this repository, being the original authors listed in the previous urls. The work was to select the main functional parts of both algorithms and join them properly in order to use the webcam.
 
 ## Requirements
+1. gcc 6
+2. g++ 6
+3. [PyTorch 0.4.0](https://pytorch.org/get-started/previous-versions/)
+4. OpenCV 3.4.4
+5. [Cuda 9.1](https://developer.nvidia.com/cuda-91-download-archive)
+6. [TensorboardX](https://www.google.com)
 
 ## Installation
 
