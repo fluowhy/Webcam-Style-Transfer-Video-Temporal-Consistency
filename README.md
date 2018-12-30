@@ -4,7 +4,7 @@ The following proyect is a merge from Learning Blind Video Temporal Consistency 
 
 For the sake of clarity, I am not the owner of some programs in this repository, being the original authors listed in the previous urls. The work was to select the main functional parts of both algorithms and join them properly in order to use the webcam.
 
-# Table of contents
+## Table of contents
 1. [Requirements](#requirements)
 2. [Installation](#installation)
 3. [Use](#use)
