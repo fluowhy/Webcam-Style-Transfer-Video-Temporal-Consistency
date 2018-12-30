@@ -43,7 +43,7 @@ if __name__ == "__main__":
     parser.add_argument('--fineSize', type=int, default=512, help='resize image to fineSize x fineSize,leave it to 0 if not resize')
     parser.add_argument('--alpha', type=float,default=0.5, help='hyperparameter to blend wct feature and content feature')
     parser.add_argument('--gpu', type=int, default=0, help="which gpu to run on.  default is 0")
-    parser.add_argument('--style', type=str, default="style/kandinsky.jpeg", help="path to style image")
+    parser.add_argument('--style', type=str, default="style/kandinsky.jpg", help="path to style image")
     
     args = parser.parse_args()
     args.ccuda = True
