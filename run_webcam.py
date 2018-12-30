@@ -151,6 +151,7 @@ if __name__ == "__main__":
 
         t1 = t2
 
+        # decorations
         cv2.rectangle(frame_i2_with_fps, (10, H_sc - 25), (10 + 150, H_sc), (0, 0, 0), -1)
         cv2.putText(frame_i2_with_fps, text, (10, H_sc), font, 1, (255, 255, 255), 2, cv2.LINE_AA)
 
@@ -171,9 +172,7 @@ if __name__ == "__main__":
         frame_o1 = frame_o2
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
-
-        
+            break        
 
 # When everything done, release the capture
 cap.release()
