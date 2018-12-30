@@ -71,4 +71,4 @@ where --cuda enables cuda, --alpha [0, 1] is a parameter which tunes the style c
 
 ![](result.png?raw=true)
 
-The screenshot is the actual video from the webcam and processed images.
+The screenshot is the actual video from the webcam and processed images. The fps bottleneck seems to be the style transfer algorithm. 
