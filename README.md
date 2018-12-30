@@ -10,9 +10,23 @@ For the sake of clarity, I am not the owner of some programs in this repository,
 3. [PyTorch 0.4.0](https://pytorch.org/get-started/previous-versions/)
 4. OpenCV 3.4.4
 5. [Cuda 9.1](https://developer.nvidia.com/cuda-91-download-archive)
-6. [TensorboardX](https://www.google.com)
+6. [TensorboardX](https://github.com/lanpa/tensorboardX)
 
 ## Installation
+
+The following instructions were tested with Ubuntu 18.04.
+
+Install gcc and g++:
+```
+sudo apt-get install gcc-6 g++-6
+``` 
+Delete gcc link to executable and make a new one:
+```
+cd /usr/bin
+sudo rm gcc
+sudo ln -s gcc-6 gcc
+``` 
+
 
 ## Use
 
