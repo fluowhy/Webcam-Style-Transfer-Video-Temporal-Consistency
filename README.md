@@ -39,11 +39,16 @@ sudo ln -s gcc-6 gcc
 Download Cuda 9.1 (Base installer, patch 1, patch 2 and patch 3). Follow the instructions in https://www.pugetsystems.com/labs/hpc/How-to-install-CUDA-9-2-on-Ubuntu-18-04-1184/ to install Cuda 9.1 in your system.
 
 Install PyTorch, OpenCV and TensorboardX (highly recommended under a [virtual environment](https://virtualenv.pypa.io/en/latest/))
-```
+``` 
 pip install https://download.pytorch.org/whl/cu91/torch-0.4.0-cp36-cp36m-linux_x86_64.whl
 pip install opencv-python
 pip install tensorboardX
 ```
+Finally clone the repository:
+```
+git clone https://github.com/fluowhy/Webcam-Style-Transfer-Video-Temporal-Consistency.git
+```
+Please note that some Python libraries would be missing in your environment, but they must be easy to install with pip.
 
 ## Use <a name="use"></a>
 
