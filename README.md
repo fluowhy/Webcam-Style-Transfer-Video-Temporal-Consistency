@@ -68,3 +68,7 @@ python run_webcam.py --cuda --alpha <value> --style <path/to/style/image>
 where --cuda enables cuda, --alpha [0, 1] is a parameter which tunes the style component in the processed image and --style is the path to te style image. Default values are --alpha 0.5 and --style style/kandinsky.jpg, Yellow-Red-Blue painting by Kandinsky.
 
 ## Results <a name="results"></a>
+
+![](result.png?raw=true)
+
+The screenshot is the actual video from the webcam and processed images.
