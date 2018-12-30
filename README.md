@@ -11,6 +11,7 @@ For the sake of clarity, I am not the owner of some programs in this repository,
 4. OpenCV 3.4.4
 5. [Cuda 9.1](https://developer.nvidia.com/cuda-91-download-archive)
 6. [TensorboardX](https://github.com/lanpa/tensorboardX)
+7. Python 3.6
 
 ## Installation
 
@@ -26,7 +27,14 @@ cd /usr/bin
 sudo rm gcc
 sudo ln -s gcc-6 gcc
 ``` 
+Download Cuda 9.1 (Base installer, patch 1, patch 2 and patch 3). Follow the instructions in https://www.pugetsystems.com/labs/hpc/How-to-install-CUDA-9-2-on-Ubuntu-18-04-1184/ to install Cuda 9.1 in your system.
 
+Install PyTorch, OpenCV and TensorboardX (highly recommended under a [virtual environment](https://virtualenv.pypa.io/en/latest/))
+```
+pip install https://download.pytorch.org/whl/cu91/torch-0.4.0-cp36-cp36m-linux_x86_64.whl
+pip install opencv-python
+pip install tensorboardX
+```
 
 ## Use
 
