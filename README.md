@@ -2,7 +2,7 @@
 
 The following proyect is a merge from Learning Blind Video Temporal Consistency https://github.com/phoenix104104/fast_blind_video_consistency and Universal Style Transfer https://github.com/sunshineatnoon/PytorchWCT. This proyect is the final work from EL7008 Advanced Image Processing from DIE UCH.
 
-For the sake of clarity, I am not the owner of some programs in this repository, being the original authors listed in the previous urls. The work was to select the main functional parts of both algorithms and join them properly in order to use the webcam.
+For the sake of clarity, I am not the owner of some programs in this repository, being the original authors listed in the previous urls. The work done consisted to select the functional main parts of both algorithms and join them properly in order to use the webcam.
 
 ## Table of contents
 1. [Requirements](#requirements)
@@ -24,7 +24,7 @@ For the sake of clarity, I am not the owner of some programs in this repository,
 
 ## Installation <a name="installations"></a>
 
-The following instructions were tested with Ubuntu 18.04.
+The following instructions were tested on Ubuntu 18.04.
 
 Install gcc and g++:
 ```
@@ -56,7 +56,6 @@ cd ..
 ```
 [Download](https://drive.google.com/file/d/1M5KBPfqrIUZqrBZf78CIxLrMUT4lD4t9/view) VGG encoder and decoder pretrained models as stated [here](https://github.com/sunshineatnoon/PytorchWCT) and extract it in the repository folder. There should be a /models folder with VGG encoder and decoder models inside it.
 
-
 Please note that some Python libraries would be missing in your environment, but they must be easy to install with pip. 
 
 ## Use <a name="use"></a>
@@ -65,7 +64,7 @@ Now it is possible to run the algorithm without problems. To start it run:
 ```
 python run_webcam.py --cuda --alpha <value> --style <path/to/style/image> 
 ```
-where --cuda enables cuda, --alpha [0, 1] is a parameter which tunes the style component in the processed image and --style is the path to te style image. Default values are --alpha 0.5 and --style style/kandinsky.jpg, Yellow-Red-Blue painting by Kandinsky.
+where --cuda enables cuda, --alpha [0, 1] is a parameter which tunes the style component in the processed image and --style is the path to the style image. Default values are --alpha 0.5 and --style style/kandinsky.jpg, Yellow-Red-Blue painting by Kandinsky.
 
 ## Results <a name="results"></a>
 
