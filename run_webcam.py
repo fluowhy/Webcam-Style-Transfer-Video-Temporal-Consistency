@@ -29,16 +29,16 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Fast Blind Video Temporal Consistency - WCT Pytorch')
 
     parser.add_argument('--workers', default=2, type=int, metavar='N',help='number of data loading workers (default: 4)')
-    parser.add_argument('--vgg1', default='/models/vgg_normalised_conv1_1.t7', help='Path to the VGG conv1_1')
-    parser.add_argument('--vgg2', default='/models/vgg_normalised_conv2_1.t7', help='Path to the VGG conv2_1')
-    parser.add_argument('--vgg3', default='/models/vgg_normalised_conv3_1.t7', help='Path to the VGG conv3_1')
-    parser.add_argument('--vgg4', default='/models/vgg_normalised_conv4_1.t7', help='Path to the VGG conv4_1')
-    parser.add_argument('--vgg5', default='/models/vgg_normalised_conv5_1.t7', help='Path to the VGG conv5_1')
-    parser.add_argument('--decoder5', default='/models/feature_invertor_conv5_1.t7', help='Path to the decoder5')
-    parser.add_argument('--decoder4', default='/models/feature_invertor_conv4_1.t7', help='Path to the decoder4')
-    parser.add_argument('--decoder3', default='/models/feature_invertor_conv3_1.t7', help='Path to the decoder3')
-    parser.add_argument('--decoder2', default='/models/feature_invertor_conv2_1.t7', help='Path to the decoder2')
-    parser.add_argument('--decoder1', default='/models/feature_invertor_conv1_1.t7', help='Path to the decoder1')
+    parser.add_argument('--vgg1', default='models/models/vgg_normalised_conv1_1.t7', help='Path to the VGG conv1_1')
+    parser.add_argument('--vgg2', default='models/models/vgg_normalised_conv2_1.t7', help='Path to the VGG conv2_1')
+    parser.add_argument('--vgg3', default='models/models/vgg_normalised_conv3_1.t7', help='Path to the VGG conv3_1')
+    parser.add_argument('--vgg4', default='models/models/vgg_normalised_conv4_1.t7', help='Path to the VGG conv4_1')
+    parser.add_argument('--vgg5', default='models/models/vgg_normalised_conv5_1.t7', help='Path to the VGG conv5_1')
+    parser.add_argument('--decoder5', default='models/models/feature_invertor_conv5_1.t7', help='Path to the decoder5')
+    parser.add_argument('--decoder4', default='models/models/feature_invertor_conv4_1.t7', help='Path to the decoder4')
+    parser.add_argument('--decoder3', default='models/models/feature_invertor_conv3_1.t7', help='Path to the decoder3')
+    parser.add_argument('--decoder2', default='models/models/feature_invertor_conv2_1.t7', help='Path to the decoder2')
+    parser.add_argument('--decoder1', default='models/models/feature_invertor_conv1_1.t7', help='Path to the decoder1')
     parser.add_argument('--cuda', action='store_true', help='enables cuda')
     parser.add_argument('--fineSize', type=int, default=512, help='resize image to fineSize x fineSize,leave it to 0 if not resize')
     parser.add_argument('--alpha', type=float,default=0.5, help='hyperparameter to blend wct feature and content feature')
@@ -93,6 +93,8 @@ if __name__ == "__main__":
 
     t1 = time.time()
 
+    font = cv2.FONT_HERSHEY_SIMPLEX
+
     while True:
 
         # next
@@ -140,21 +142,38 @@ if __name__ == "__main__":
         frame_i2_numpy = frame_i2.squeeze().transpose(0, 2).transpose(0, 1).cpu().numpy()
         frame_p2_numpy = frame_p2.squeeze().transpose(0, 2).transpose(0, 1).cpu().numpy()
 
-        stacked = np.hstack((frame_i2_numpy, frame_p2_numpy, frame_o2))
+        frame_i2_with_fps = np.copy(frame_i2_numpy)
+        frame_o2_with_fps = np.copy(frame_o2)
+
+        t2 = time.time()
+
+        text = "{:.2f} fps".format(1/(t2 - t1))
+
+        t1 = t2
+
+        cv2.rectangle(frame_i2_with_fps, (10, H_sc - 25), (10 + 150, H_sc), (0, 0, 0), -1)
+        cv2.putText(frame_i2_with_fps, text, (10, H_sc), font, 1, (255, 255, 255), 2, cv2.LINE_AA)
+
+        cv2.rectangle(frame_i2_with_fps, (10 + 150 + 10, H_sc - 25), (10 + 150 + 10 + 125, H_sc), (0, 0, 0), -1)
+        cv2.putText(frame_i2_with_fps, "original", (10 + 150 + 10, H_sc), font, 1, (255, 255, 255), 2, cv2.LINE_AA)
+
+        cv2.rectangle(frame_p2_numpy, (10, H_sc - 25), (10 + 225, H_sc), (0, 0, 0), -1)
+        cv2.putText(frame_p2_numpy, "style transfer", (10, H_sc), font, 1, (255, 255, 255), 2, cv2.LINE_AA)
+
+        cv2.rectangle(frame_o2_with_fps, (10, H_sc - 25), (10 + 375, H_sc), (0, 0, 0), -1)
+        cv2.putText(frame_o2_with_fps, "blind video consistency", (10, H_sc), font, 1, (255, 255, 255), 2, cv2.LINE_AA)        
+
+        stacked = np.hstack((frame_i2_with_fps, frame_p2_numpy, frame_o2_with_fps))
 
         cv2.imshow('frame', stacked)
 
         frame_i1 = frame_i2_numpy
         frame_o1 = frame_o2
 
-        t2 = time.time()
-
-        print("{:.2f} fps".format(1/(t2 - t1)))
-
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
-        t1 = t2
+        
 
 # When everything done, release the capture
 cap.release()
