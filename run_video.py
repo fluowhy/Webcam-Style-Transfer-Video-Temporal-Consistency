@@ -44,11 +44,14 @@ if __name__ == "__main__":
     parser.add_argument('--alpha', type=float,default=0.5, help='hyperparameter to blend wct feature and content feature')
     parser.add_argument('--gpu', type=int, default=0, help="which gpu to run on.  default is 0")
     parser.add_argument('--style', type=str, default="style/kandinsky.jpg", help="path to style image")
+    parser.add_argument('--video', type=str, default="test.mp4", help="path to video")
     
     args = parser.parse_args()
     args.ccuda = True
 
     args.size_multiplier = 2 ** 2 ## Inputs to TransformNet need to be divided by 4
+
+    video_name = args.video.split("/")[-1].split(".")[0]
 
     if args.ccuda and not torch.cuda.is_available():
         raise Exception("No GPU found, please run without -cuda")
@@ -81,100 +84,97 @@ if __name__ == "__main__":
             
     ST = StyleTransfer(args)
     ST.uploadStyleImage(args.style, resize=True)
-    cap = cv2.VideoCapture(0)
+    cap = cv2.VideoCapture(args.video)
+    fps = cap.get(cv2.CAP_PROP_FPS)
+    nframes = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
 
     # initial
     ret, frame = cap.read()
     frame_i1 = int2float(np.float32(frame))
     #frame_o1 = equalization(frame)
     frame_o1 = ST.eval(frame)
+    frame_p2 = ST.eval(np.float32(frame))
 
     lstm_state = None
 
-    t1 = time.time()
-
     font = cv2.FONT_HERSHEY_SIMPLEX
 
-    #while True:
-    while cap.isOpened():
+    fourcc = cv2.VideoWriter_fourcc(*'XVID')
+    height, width, _ = frame_p2.shape
+    video = cv2.VideoWriter("processed_videos/{}_processed.avi".format(video_name), fourcc, fps, (int(width*3), height))
+
+    for i in range(nframes):
+        print("frame {}/{}".format(i, nframes))
 
         # next
         ret, frame = cap.read()
-        frame_i2 = int2float(np.float32(frame))
-        #frame_p2 = equalization(frame)
-        frame_p2 = ST.eval(frame)
-        
-        ### resize image
-        H_orig = frame_p2.shape[0]
-        W_orig = frame_p2.shape[1]
-
-        H_sc = int(math.ceil(float(H_orig) / args.size_multiplier) * args.size_multiplier)
-        W_sc = int(math.ceil(float(W_orig) / args.size_multiplier) * args.size_multiplier)
-
-        frame_i1 = cv2.resize(frame_i1, (W_sc, H_sc))
-        frame_i2 = cv2.resize(frame_i2, (W_sc, H_sc))
-        frame_o1 = cv2.resize(frame_o1, (W_sc, H_sc))
-        frame_p2 = cv2.resize(frame_p2, (W_sc, H_sc))
-        
-        with torch.no_grad():
-
-            ### convert to tensor
-            frame_i1 = utils.img2tensor(frame_i1).to(device)
-            frame_i2 = utils.img2tensor(frame_i2).to(device)
-            frame_o1 = utils.img2tensor(frame_o1).to(device)
-            frame_p2 = utils.img2tensor(frame_p2).to(device)
+        if ret==True:
+            frame_i2 = int2float(np.float32(frame))
+            #frame_p2 = equalization(frame)
+            frame_p2 = ST.eval(np.float32(frame))
             
-            ### model input
-            inputs = torch.cat((frame_p2, frame_o1, frame_i2, frame_i1), dim=1)
+            ### resize image
+            H_orig, W_orig, _ = frame_p2.shape
+
+            H_sc = int(math.ceil(float(H_orig) / args.size_multiplier) * args.size_multiplier)
+            W_sc = int(math.ceil(float(W_orig) / args.size_multiplier) * args.size_multiplier)
+
+            frame_i1 = cv2.resize(frame_i1, (W_sc, H_sc))
+            frame_i2 = cv2.resize(frame_i2, (W_sc, H_sc))
+            frame_o1 = cv2.resize(frame_o1, (W_sc, H_sc))
+            frame_p2 = cv2.resize(frame_p2, (W_sc, H_sc))
             
-            output, lstm_state = model(inputs, lstm_state)
-            frame_o2 = frame_p2 + output
-           
-            ## create new variable to detach from graph and avoid memory accumulation
-            lstm_state = utils.repackage_hidden(lstm_state) 
+            with torch.no_grad():
+
+                ### convert to tensor
+                frame_i1 = utils.img2tensor(frame_i1).to(device)
+                frame_i2 = utils.img2tensor(frame_i2).to(device)
+                frame_o1 = utils.img2tensor(frame_o1).to(device)
+                frame_p2 = utils.img2tensor(frame_p2).to(device)
+                
+                ### model input
+                inputs = torch.cat((frame_p2, frame_o1, frame_i2, frame_i1), dim=1)
+                
+                output, lstm_state = model(inputs, lstm_state)
+                frame_o2 = frame_p2 + output
+               
+                ## create new variable to detach from graph and avoid memory accumulation
+                lstm_state = utils.repackage_hidden(lstm_state) 
 
 
-        ### convert to numpy array
-        frame_o2 = utils.tensor2img(frame_o2)
-        
-        ### resize to original size
-        frame_o2 = cv2.resize(frame_o2, (W_orig, H_orig))
+            ### convert to numpy array
+            frame_o2 = utils.tensor2img(frame_o2)
+            
+            ### resize to original size
+            frame_o2 = cv2.resize(frame_o2, (W_orig, H_orig))
 
-        frame_i2_numpy = frame_i2.squeeze().transpose(0, 2).transpose(0, 1).cpu().numpy()
-        frame_p2_numpy = frame_p2.squeeze().transpose(0, 2).transpose(0, 1).cpu().numpy()
+            frame_i2_numpy = frame_i2.squeeze().transpose(0, 2).transpose(0, 1).cpu().numpy()
+            frame_p2_numpy = frame_p2.squeeze().transpose(0, 2).transpose(0, 1).cpu().numpy()
 
-        frame_i2_with_fps = np.copy(frame_i2_numpy)
-        frame_o2_with_fps = np.copy(frame_o2)
+            frame_i2_with_fps = np.copy(frame_i2_numpy)
+            frame_o2_with_fps = np.copy(frame_o2)
 
-        t2 = time.time()
+            cv2.rectangle(frame_i2_with_fps, (10, H_sc - 25), (10 + 125, H_sc), (0, 0, 0), -1)
+            cv2.putText(frame_i2_with_fps, "original", (10 + 150 + 10, H_sc), font, 1, (255, 255, 255), 2, cv2.LINE_AA)
 
-        text = "{:.2f} fps".format(1/(t2 - t1))
+            cv2.rectangle(frame_p2_numpy, (10, H_sc - 25), (10 + 225, H_sc), (0, 0, 0), -1)
+            cv2.putText(frame_p2_numpy, "style transfer", (10, H_sc), font, 1, (255, 255, 255), 2, cv2.LINE_AA)
 
-        t1 = t2
+            cv2.rectangle(frame_o2_with_fps, (10, H_sc - 25), (10 + 375, H_sc), (0, 0, 0), -1)
+            cv2.putText(frame_o2_with_fps, "blind video consistency", (10, H_sc), font, 1, (255, 255, 255), 2, cv2.LINE_AA)        
 
-        # decorations
-        cv2.rectangle(frame_i2_with_fps, (10, H_sc - 25), (10 + 150, H_sc), (0, 0, 0), -1)
-        cv2.putText(frame_i2_with_fps, text, (10, H_sc), font, 1, (255, 255, 255), 2, cv2.LINE_AA)
+            stacked = np.hstack((frame_i2_with_fps, frame_p2_numpy, frame_o2_with_fps))
 
-        cv2.rectangle(frame_i2_with_fps, (10 + 150 + 10, H_sc - 25), (10 + 150 + 10 + 125, H_sc), (0, 0, 0), -1)
-        cv2.putText(frame_i2_with_fps, "original", (10 + 150 + 10, H_sc), font, 1, (255, 255, 255), 2, cv2.LINE_AA)
+            video.write(float2int(stacked))
 
-        cv2.rectangle(frame_p2_numpy, (10, H_sc - 25), (10 + 225, H_sc), (0, 0, 0), -1)
-        cv2.putText(frame_p2_numpy, "style transfer", (10, H_sc), font, 1, (255, 255, 255), 2, cv2.LINE_AA)
+            frame_i1 = frame_i2_numpy
+            frame_o1 = frame_o2
 
-        cv2.rectangle(frame_o2_with_fps, (10, H_sc - 25), (10 + 375, H_sc), (0, 0, 0), -1)
-        cv2.putText(frame_o2_with_fps, "blind video consistency", (10, H_sc), font, 1, (255, 255, 255), 2, cv2.LINE_AA)        
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+                break
 
-        stacked = np.hstack((frame_i2_with_fps, frame_p2_numpy, frame_o2_with_fps))
+    cap.release() 
+    cv2.destroyAllWindows()
+    video.release()
 
-        cv2.imshow('frame', stacked)
-
-        frame_i1 = frame_i2_numpy
-        frame_o1 = frame_o2
-
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break        
-
-# When everything done, release the capture
-cap.release()
-cv2.destroyAllWindows()
+    

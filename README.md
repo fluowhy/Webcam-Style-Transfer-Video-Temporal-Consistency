@@ -7,8 +7,9 @@ For the sake of clarity, I am not the owner of some programs in this repository,
 ## Table of contents
 1. [Requirements](#requirements)
 2. [Installation](#installation)
-3. [Use](#use)
-3. [Results](#results)
+3. [Webcam processing](#webcam)
+4. [Video processing](#video)
+5. [Results](#results)
 
 ## Requirements <a name="requirements"></a>
 
@@ -64,13 +65,21 @@ cd ..
 
 Please note that some Python libraries would be missing in your environment, but they must be easy to install with pip. 
 
-## Use <a name="use"></a>
+## Webcam Processing <a name="webcam"></a>
 
 Now it is possible to run the algorithm without problems. To start it run:
 ```
 python run_webcam.py --cuda --alpha <value> --style <path/to/style/image> 
 ```
 where --cuda enables cuda, --alpha [0, 1] is a parameter which tunes the style component in the processed image and --style is the path to the style image. Default values are --alpha 0.5 and --style style/kandinsky.jpg, Yellow-Red-Blue painting by Kandinsky.
+
+## Video Processing <a name="video"></a>
+
+To process a video the command it is quite similar:
+```
+python run_webcam.py --cuda --alpha <value> --style <path/to/style/image> --video <path/to/video>
+```
+where the new argument --video is the path to the video to be processed. Default is test.mp4 included with the reposotory. The processed video is stored in /processed_videos folder.
 
 ## Results <a name="results"></a>
 
