@@ -77,7 +77,7 @@ where --cuda enables cuda, --alpha [0, 1] is a parameter which tunes the style c
 
 To process a video the command it is quite similar:
 ```
-python run_webcam.py --cuda --alpha <value> --style <path/to/style/image> --video <path/to/video>
+python run_video.py --cuda --alpha <value> --style <path/to/style/image> --video <path/to/video>
 ```
 where the new argument --video is the path to the video to be processed. Default is test.mp4 included with the reposotory. The processed video is stored in /processed_videos folder.
 
