@@ -103,6 +103,8 @@ if __name__ == "__main__":
     height, width, _ = frame_p2.shape
     video = cv2.VideoWriter("processed_videos/{}_processed.avi".format(video_name), fourcc, fps, (int(width*3), height))
 
+    t1 = time.time()
+
     for i in range(nframes):
         print("frame {}/{}".format(i, nframes))
 
@@ -149,21 +151,9 @@ if __name__ == "__main__":
             frame_o2 = cv2.resize(frame_o2, (W_orig, H_orig))
 
             frame_i2_numpy = frame_i2.squeeze().transpose(0, 2).transpose(0, 1).cpu().numpy()
-            frame_p2_numpy = frame_p2.squeeze().transpose(0, 2).transpose(0, 1).cpu().numpy()
+            frame_p2_numpy = frame_p2.squeeze().transpose(0, 2).transpose(0, 1).cpu().numpy()  
 
-            frame_i2_with_fps = np.copy(frame_i2_numpy)
-            frame_o2_with_fps = np.copy(frame_o2)
-
-            cv2.rectangle(frame_i2_with_fps, (10, H_sc - 25), (10 + 125, H_sc), (0, 0, 0), -1)
-            cv2.putText(frame_i2_with_fps, "original", (10 + 150 + 10, H_sc), font, 1, (255, 255, 255), 2, cv2.LINE_AA)
-
-            cv2.rectangle(frame_p2_numpy, (10, H_sc - 25), (10 + 225, H_sc), (0, 0, 0), -1)
-            cv2.putText(frame_p2_numpy, "style transfer", (10, H_sc), font, 1, (255, 255, 255), 2, cv2.LINE_AA)
-
-            cv2.rectangle(frame_o2_with_fps, (10, H_sc - 25), (10 + 375, H_sc), (0, 0, 0), -1)
-            cv2.putText(frame_o2_with_fps, "blind video consistency", (10, H_sc), font, 1, (255, 255, 255), 2, cv2.LINE_AA)        
-
-            stacked = np.hstack((frame_i2_with_fps, frame_p2_numpy, frame_o2_with_fps))
+            stacked = np.hstack((frame_i2_numpy, frame_p2_numpy, frame_o2))
 
             video.write(float2int(stacked))
 
@@ -172,6 +162,10 @@ if __name__ == "__main__":
 
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
+
+    t2 = time.time()
+
+    print("Elapsed time: {:.2f} min.".format((t2 - t1)/60))
 
     cap.release() 
     cv2.destroyAllWindows()
