@@ -45,11 +45,10 @@ Download Cuda 9.1 (Base installer, patch 1, patch 2 and patch 3). Follow the ins
 Install PyTorch, OpenCV, TensorboardX and others (highly recommended under a [virtual environment](https://virtualenv.pypa.io/en/latest/))
 ``` 
 pip install https://download.pytorch.org/whl/cu91/torch-0.4.0-cp36-cp36m-linux_x86_64.whl
+pip install torchvision
 pip install opencv-python
 pip install tensorboardX
-pip install colorama
-pip install tqdm
-pip install setproctitle
+pip install colorama tqdm setproctitle
 ```
 Clone the repository:
 ```
