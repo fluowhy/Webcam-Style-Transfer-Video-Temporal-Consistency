@@ -78,7 +78,7 @@ To process a video the command it is quite similar:
 ```
 python run_video.py --cuda --alpha <value> --style <path/to/style/image> --video <path/to/video>
 ```
-where the new argument --video is the path to the video to be processed. Default is test.mp4 included with the reposotory. The processed video is stored in /processed_videos folder.
+where the new argument --video is the path to the video to be processed. Default is test.mp4 included with the repository. The processed video is stored in /processed_videos folder.
 
 ## Results <a name="results"></a>
 
